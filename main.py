@@ -23,12 +23,9 @@ data = {
         'passwd': passwd
 }
 try:
-    print('进行登录...')
-    print(login_url)
-    print(email)
-    print(passwd)    
+    print('进行登录...')  
     response = json.loads(session.post(url=login_url,headers=header,data=data).text)
-    print(response)
+    print(result['msg'])
     # 进行签到
     result = json.loads(session.post(url=check_url,headers=header).text)
     print(result['msg'])
