@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  RUN_ENV: 'JICHANGCHECKIN'
+  RUN_ENV: 'PROD'
 
 jobs:
   build:
