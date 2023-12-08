@@ -1,4 +1,5 @@
 import requests, json, re, os
+from bs4 import BeautifulSoup
 
 session = requests.session()
 # 机场的地址
@@ -12,8 +13,7 @@ SCKEY = os.environ.get('SCKEY')
 
 login_url = '{}/auth/login'.format(url)
 check_url = '{}/user/checkin'.format(url)
-profile_url = '{}/user/profile'.format(url)
-
+profile_url = '{}/user'.format(url)
 
 header = {
         'origin': url,
@@ -31,16 +31,23 @@ try:
     result = json.loads(session.post(url=check_url,headers=header).text)
     print(result)
     response = session.get(url=profile_url,headers=header).text
-    print(response)    
+    soup = BeautifulSoup(response, 'html.parser')
+    card_warps = soup.find_all('div', class_='card-wrap')
     content = result['msg']
+    for card_warp in card_warps:
+        card_name = card_warp.find('h4').text.strip()
+        if card_name == '剩余流量':
+            card_value = card_warp.find('div', class_='card-body').text.strip()
+            content = "{}\n{}：{}".format(content,card_name, card_value)  
+    print(content)          
     # 进行推送
     if SCKEY != '':
-        push_url = 'https://sctapi.ftqq.com/{}.send?title=机场签到&desp={}'.format(SCKEY, content)
+        push_url = 'https://sctapi.ftqq.com/{}.send?title=iKuuu机场签到&desp={}'.format(SCKEY, content)
         requests.post(url=push_url)
         print('推送成功')
 except:
     content = '签到失败'
     print(content)
-    if SCKEY == '':
-        push_url = 'https://sctapi.ftqq.com/{}.send?title=机场签到&desp={}'.format(SCKEY, content)
+    if SCKEY != '':
+        push_url = 'https://sctapi.ftqq.com/{}.send?title=iKuuu机场签到&desp={}'.format(SCKEY, content)
         requests.post(url=push_url)
