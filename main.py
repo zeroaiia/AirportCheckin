@@ -41,6 +41,6 @@ try:
 except:
     content = '签到失败'
     print(content)
-    if SCKEY != '':
+    if SCKEY == '':
         push_url = 'https://sctapi.ftqq.com/{}.send?title=机场签到&desp={}'.format(SCKEY, content)
         requests.post(url=push_url)
