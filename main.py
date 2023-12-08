@@ -30,7 +30,7 @@ try:
     # 进行签到
     result = json.loads(session.post(url=check_url,headers=header).text)
     print(result)
-    response = json.loads(session.post(url=profile_url,headers=header).text) 
+    response = json.loads(session.get(url=profile_url,headers=header).text) 
     print(response)    
     content = result['msg']
     # 进行推送
