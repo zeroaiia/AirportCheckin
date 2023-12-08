@@ -12,6 +12,7 @@ SCKEY = os.environ.get('SCKEY')
 
 login_url = '{}/auth/login'.format(url)
 check_url = '{}/user/checkin'.format(url)
+profile_url = '{}/user/profile'.format(url)
 
 
 header = {
@@ -29,6 +30,8 @@ try:
     # 进行签到
     result = json.loads(session.post(url=check_url,headers=header).text)
     print(result)
+    response = json.loads(session.post(url=profile_url,headers=header).text) 
+    print(response)    
     content = result['msg']
     # 进行推送
     if SCKEY != '':
